@@ -50,6 +50,8 @@ salesperson_id INT,
 		on delete cascade
 		);
 	
+    
+/* INSERTING VALUES*/
 
 /* Cars table*/
 
@@ -69,7 +71,8 @@ Values
 /* Customers table*/
 
 -- manually insert first record
-INSERT INTO customers values (0, 10001, 'Pablo Picasso', '+34 636 17 63 82', null, 'Paseo de la Chopera, 14' , 'Madrid', 'Madrid', 'Spain', 28045);
+INSERT INTO customers 
+values (0, 10001, 'Pablo Picasso', '+34 636 17 63 82', null, 'Paseo de la Chopera, 14' , 'Madrid', 'Madrid', 'Spain', 28045);
 
 -- insert the rest
 INSERT INTO customers (CustomerID, name, phone, email, address, city, state_province, country, postal)
