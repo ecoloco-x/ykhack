@@ -564,6 +564,9 @@
         </metadata-records>
       </connection>
       <aliases enabled='yes' />
+      <column caption='AVG_profit (exclude)' datatype='real' name='[AVG_profit (copy)_1549519814660022278]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='{fixed : avg({fixed [Product Sub-Category]: sum([Profit])})}' />
+      </column>
       <column caption='index' datatype='integer' name='[Calculation_1529253612807335937]' role='measure' type='ordinal'>
         <calculation class='tableau' formula='INDEX()'>
           <table-calc ordering-type='Rows' />
@@ -576,12 +579,22 @@
         <calculation class='tableau' formula='SUM([Profit]) / SUM([Sales])' />
       </column>
       <column caption='AVG_profit' datatype='real' name='[Calculation_1529253612823949318]' role='measure' type='quantitative'>
-        <calculation class='tableau' formula='SUM([Profit]) - WINDOW_AVG(SUM([Profit]))'>
+        <calculation class='tableau' formula='WINDOW_AVG(SUM([Profit]))'>
           <table-calc ordering-type='Rows' />
         </calculation>
       </column>
+      <column caption='top10_perc' datatype='real' name='[Calculation_1549519814655520770]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='sum(if [Customer Name Set] then [Sales]  end)' />
+      </column>
+      <column caption='top_10_perc' datatype='real' name='[Calculation_1549519814656380931]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='[Calculation_1549519814655520770]/sum([Sales])' />
+      </column>
+      <column caption='Calculation1' datatype='boolean' name='[Calculation_1549519814658613253]' role='measure' type='nominal'>
+        <calculation class='tableau' formula='[Calculation_1529253612820652037] &gt; 0.25' />
+      </column>
       <column datatype='string' name='[City]' role='dimension' semantic-role='[City].[Name]' type='nominal' />
       <column datatype='integer' name='[Customer ID]' role='dimension' type='ordinal' />
+      <column datatype='string' name='[Customer Name]' role='dimension' type='nominal' />
       <column datatype='integer' name='[Order ID (Returns)]' role='dimension' type='ordinal' />
       <column datatype='integer' name='[Order ID]' role='dimension' type='ordinal' />
       <column aggregation='Sum' datatype='integer' default-format='*00000' name='[Postal Code]' role='dimension' semantic-role='[ZipCode].[Name]' type='ordinal' />
@@ -612,6 +625,46 @@
       <column-instance column='[Sales]' derivation='Sum' name='[sum:Sales:qk]' pivot='key' type='quantitative' />
       <column-instance column='[Shipping Cost]' derivation='Sum' name='[sum:Shipping Cost:qk]' pivot='key' type='quantitative' />
       <column-instance column='[Calculation_1529253612817707012]' derivation='User' name='[usr:Calculation_1529253612817707012:qk]' pivot='key' type='quantitative' />
+      <column-instance column='[Sales]' derivation='Sum' name='[win:sum:Sales:qk:10]' pivot='key' type='quantitative'>
+        <table-calc aggregation='Avg' from='-6' ordering-type='Rows' to='1' type='WindowTotal' window-options='IncludeCurrent' />
+      </column-instance>
+      <column-instance column='[Sales]' derivation='Sum' name='[win:sum:Sales:qk:12]' pivot='key' type='quantitative'>
+        <table-calc aggregation='Avg' from='-6' ordering-type='Rows' to='2' type='WindowTotal' window-options='IncludeCurrent' />
+      </column-instance>
+      <column-instance column='[Sales]' derivation='Sum' name='[win:sum:Sales:qk:14]' pivot='key' type='quantitative'>
+        <table-calc aggregation='Avg' from='-6' ordering-type='Rows' to='3' type='WindowTotal' window-options='IncludeCurrent' />
+      </column-instance>
+      <column-instance column='[Sales]' derivation='Sum' name='[win:sum:Sales:qk:16]' pivot='key' type='quantitative'>
+        <table-calc aggregation='Avg' from='-6' ordering-type='Rows' to='4' type='WindowTotal' window-options='IncludeCurrent' />
+      </column-instance>
+      <column-instance column='[Sales]' derivation='Sum' name='[win:sum:Sales:qk:18]' pivot='key' type='quantitative'>
+        <table-calc aggregation='Avg' from='-6' ordering-type='Rows' to='5' type='WindowTotal' window-options='IncludeCurrent' />
+      </column-instance>
+      <column-instance column='[Sales]' derivation='Sum' name='[win:sum:Sales:qk:20]' pivot='key' type='quantitative'>
+        <table-calc aggregation='Avg' from='-6' ordering-type='Rows' to='6' type='WindowTotal' window-options='IncludeCurrent' />
+      </column-instance>
+      <column-instance column='[Sales]' derivation='Sum' name='[win:sum:Sales:qk:2]' pivot='key' type='quantitative'>
+        <table-calc aggregation='Avg' from='-3' ordering-type='Rows' to='0' type='WindowTotal' window-options='IncludeCurrent' />
+      </column-instance>
+      <column-instance column='[Sales]' derivation='Sum' name='[win:sum:Sales:qk:4]' pivot='key' type='quantitative'>
+        <table-calc aggregation='Avg' from='-4' ordering-type='Rows' to='0' type='WindowTotal' window-options='IncludeCurrent' />
+      </column-instance>
+      <column-instance column='[Sales]' derivation='Sum' name='[win:sum:Sales:qk:6]' pivot='key' type='quantitative'>
+        <table-calc aggregation='Avg' from='-5' ordering-type='Rows' to='0' type='WindowTotal' window-options='IncludeCurrent' />
+      </column-instance>
+      <column-instance column='[Sales]' derivation='Sum' name='[win:sum:Sales:qk:8]' pivot='key' type='quantitative'>
+        <table-calc aggregation='Avg' from='-6' ordering-type='Rows' to='0' type='WindowTotal' window-options='IncludeCurrent' />
+      </column-instance>
+      <column-instance column='[Sales]' derivation='Sum' name='[win:sum:Sales:qk]' pivot='key' type='quantitative'>
+        <table-calc aggregation='Avg' from='-2' ordering-type='Rows' to='0' type='WindowTotal' window-options='IncludeCurrent' />
+      </column-instance>
+      <group caption='Customer Name Set' name='[Customer Name Set]' name-style='unqualified' user:ui-builder='filter-group'>
+        <groupfilter count='10' end='top' function='end' units='records' user:ui-marker='end' user:ui-top-by-field='true'>
+          <groupfilter direction='DESC' expression='SUM([Sales])' function='order' user:ui-marker='order'>
+            <groupfilter function='level-members' level='[Customer Name]' user:ui-manual-selection='true' user:ui-manual-selection-all-when-empty='true' user:ui-manual-selection-is-empty='true' user:ui-marker='enumerate' />
+          </groupfilter>
+        </groupfilter>
+      </group>
       <layout _.fcp.SchemaViewerObjectModel.false...dim-percentage='0.5' _.fcp.SchemaViewerObjectModel.false...measure-percentage='0.4' dim-ordering='alphabetic' measure-ordering='alphabetic' show-structure='true' />
       <style>
         <style-rule element='mark'>
@@ -689,6 +742,39 @@
             </map>
             <map to='#f28e2b'>
               <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[sum:Sales:qk]&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[win:sum:Sales:qk:10]&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[win:sum:Sales:qk:12]&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[win:sum:Sales:qk:14]&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[win:sum:Sales:qk:16]&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[win:sum:Sales:qk:18]&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[win:sum:Sales:qk:2]&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[win:sum:Sales:qk:20]&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[win:sum:Sales:qk:4]&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[win:sum:Sales:qk:6]&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[win:sum:Sales:qk:8]&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[win:sum:Sales:qk]&quot;</bucket>
             </map>
           </encoding>
         </style-rule>
@@ -774,18 +860,44 @@
             <datasource caption='sample-superstore-subset-excel' name='federated.1ywtm5k13ttlvp12jupo71pdz44i' />
           </datasources>
           <datasource-dependencies datasource='federated.1ywtm5k13ttlvp12jupo71pdz44i'>
+            <column caption='AVG_profit (exclude)' datatype='real' name='[AVG_profit (copy)_1549519814660022278]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='{fixed : avg({fixed [Product Sub-Category]: sum([Profit])})}' />
+            </column>
             <column caption='AVG_profit' datatype='real' name='[Calculation_1529253612823949318]' role='measure' type='quantitative'>
-              <calculation class='tableau' formula='SUM([Profit]) - WINDOW_AVG(SUM([Profit]))'>
+              <calculation class='tableau' formula='WINDOW_AVG(SUM([Profit]))'>
                 <table-calc ordering-type='Rows' />
               </calculation>
             </column>
             <column datatype='string' name='[Product Sub-Category]' role='dimension' type='nominal' />
             <column datatype='real' name='[Profit]' role='measure' type='quantitative' />
+            <column-instance column='[AVG_profit (copy)_1549519814660022278]' derivation='Attribute' name='[attr:AVG_profit (copy)_1549519814660022278:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Product Sub-Category]' derivation='None' name='[none:Product Sub-Category:nk]' pivot='key' type='nominal' />
             <column-instance column='[Calculation_1529253612823949318]' derivation='User' name='[usr:Calculation_1529253612823949318:qk:2]' pivot='key' type='quantitative'>
               <table-calc ordering-type='Columns' />
             </column-instance>
           </datasource-dependencies>
+          <filter class='categorical' column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[:Measure Names]'>
+            <groupfilter function='union' user:op='manual'>
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1529253612823949318:qk:2]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[attr:AVG_profit (copy)_1549519814660022278:qk]&quot;' />
+            </groupfilter>
+          </filter>
+          <manual-sort column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[:Measure Names]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1529253612823949318:qk:2]&quot;</bucket>
+              <bucket>&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[attr:AVG_profit (copy)_1549519814660022278:qk]&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <filter class='categorical' column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[none:Product Sub-Category:nk]'>
+            <groupfilter function='except' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[none:Product Sub-Category:nk]' />
+              <groupfilter function='member' level='[none:Product Sub-Category:nk]' member='%null%' />
+            </groupfilter>
+          </filter>
+          <slices>
+            <column>[federated.1ywtm5k13ttlvp12jupo71pdz44i].[:Measure Names]</column>
+            <column>[federated.1ywtm5k13ttlvp12jupo71pdz44i].[none:Product Sub-Category:nk]</column>
+          </slices>
           <aggregation value='true' />
         </view>
         <style>
@@ -801,7 +913,7 @@
             </view>
             <mark class='Automatic' />
             <encodings>
-              <text column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1529253612823949318:qk:2]' />
+              <text column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[Multiple Values]' />
             </encodings>
             <style>
               <style-rule element='mark'>
@@ -811,7 +923,7 @@
           </pane>
         </panes>
         <rows>[federated.1ywtm5k13ttlvp12jupo71pdz44i].[none:Product Sub-Category:nk]</rows>
-        <cols />
+        <cols>[federated.1ywtm5k13ttlvp12jupo71pdz44i].[:Measure Names]</cols>
       </table>
       <simple-id uuid='{490EE5F7-47D4-4CF7-A184-0EC03FD190E8}' />
     </worksheet>
@@ -1231,7 +1343,7 @@
         </panes>
         <rows>[federated.1ywtm5k13ttlvp12jupo71pdz44i].[fVal:sum:Sales:qk]</rows>
         <cols>[federated.1ywtm5k13ttlvp12jupo71pdz44i].[yr:Order Date:ok]</cols>
-        <forecast-specification auto-forecast-agg='true' band-confidence-level='95.000000' enabled='true' fill-type='fill-missing' ignore-last='1' model-type='auto-season' range-type='auto' show-prediction-bands='true' />
+        <forecast-specification auto-forecast-agg='true' band-confidence-level='95.000000' enabled='true' fill-type='fill-missing' ignore-last='0' model-type='auto-season' range-periods='Year-Trunc' range-size='1' range-type='next' show-prediction-bands='true' />
       </table>
       <simple-id uuid='{378B512E-984F-4041-A9C0-8BAF7E94F2AC}' />
     </worksheet>
@@ -1242,21 +1354,18 @@
             <datasource caption='sample-superstore-subset-excel' name='federated.1ywtm5k13ttlvp12jupo71pdz44i' />
           </datasources>
           <datasource-dependencies datasource='federated.1ywtm5k13ttlvp12jupo71pdz44i'>
-            <column caption='index' datatype='integer' name='[Calculation_1529253612807335937]' role='measure' type='ordinal'>
-              <calculation class='tableau' formula='INDEX()'>
-                <table-calc ordering-type='Rows' />
-              </calculation>
-            </column>
             <column datatype='string' name='[Customer Name]' role='dimension' type='nominal' />
             <column datatype='real' name='[Sales]' role='measure' type='quantitative' />
+            <column-instance column='[Customer Name Set]' derivation='InOut' name='[io:Customer Name Set:nk]' pivot='key' type='nominal' />
             <column-instance column='[Customer Name]' derivation='None' name='[none:Customer Name:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Sales]' derivation='Sum' name='[pcto:sum:Sales:qk:4]' pivot='key' type='quantitative'>
-              <table-calc ordering-type='Columns' type='PctTotal' />
+            <column-instance column='[Sales]' derivation='Sum' name='[pcto:cum:sum:Sales:qk:9]' pivot='key' type='quantitative'>
+              <table-calc aggregation='Sum' ordering-type='Field' type='CumTotal'>
+                <order field='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[Customer Name]' />
+                <order field='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[io:Customer Name Set:nk]' />
+              </table-calc>
+              <table-calc ordering-type='Rows' type='PctTotal' />
             </column-instance>
             <column-instance column='[Sales]' derivation='Sum' name='[sum:Sales:qk]' pivot='key' type='quantitative' />
-            <column-instance column='[Calculation_1529253612807335937]' derivation='User' name='[usr:Calculation_1529253612807335937:ok]' pivot='key' type='ordinal'>
-              <table-calc ordering-type='Columns' />
-            </column-instance>
           </datasource-dependencies>
           <computed-sort column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[none:Customer Name:nk]' direction='DESC' using='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[sum:Sales:qk]' />
           <aggregation value='true' />
@@ -1269,25 +1378,84 @@
             </view>
             <mark class='Automatic' />
             <encodings>
-              <text column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[pcto:sum:Sales:qk:4]' />
+              <color column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[io:Customer Name Set:nk]' />
+            </encodings>
+          </pane>
+        </panes>
+        <rows>[federated.1ywtm5k13ttlvp12jupo71pdz44i].[pcto:cum:sum:Sales:qk:9]</rows>
+        <cols>[federated.1ywtm5k13ttlvp12jupo71pdz44i].[none:Customer Name:nk]</cols>
+      </table>
+      <simple-id uuid='{9875162B-19A1-4859-A380-B7067014AC6E}' />
+    </worksheet>
+    <worksheet name='unfinished2 (2)'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='sample-superstore-subset-excel' name='federated.1ywtm5k13ttlvp12jupo71pdz44i' />
+          </datasources>
+          <datasource-dependencies datasource='federated.1ywtm5k13ttlvp12jupo71pdz44i'>
+            <column caption='top10_perc' datatype='real' name='[Calculation_1549519814655520770]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='sum(if [Customer Name Set] then [Sales]  end)' />
+            </column>
+            <column caption='top_10_perc' datatype='real' name='[Calculation_1549519814656380931]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='[Calculation_1549519814655520770]/sum([Sales])' />
+            </column>
+            <column datatype='string' name='[Customer Name]' role='dimension' type='nominal' />
+            <column datatype='real' name='[Sales]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_1549519814655520770]' derivation='User' name='[usr:Calculation_1549519814655520770:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1549519814656380931]' derivation='User' name='[usr:Calculation_1549519814656380931:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[:Measure Names]'>
+            <groupfilter function='union' user:op='manual'>
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1549519814655520770:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1549519814656380931:qk]&quot;' />
+            </groupfilter>
+          </filter>
+          <slices>
+            <column>[federated.1ywtm5k13ttlvp12jupo71pdz44i].[:Measure Names]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='cell'>
+            <format attr='text-format' field='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1549519814656380931:qk]' value='p0.00%' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <text column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[Multiple Values]' />
             </encodings>
             <style>
               <style-rule element='mark'>
                 <format attr='mark-labels-show' value='true' />
-                <format attr='mark-labels-cull' value='true' />
               </style-rule>
             </style>
           </pane>
         </panes>
-        <rows>([federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1529253612807335937:ok] / [federated.1ywtm5k13ttlvp12jupo71pdz44i].[none:Customer Name:nk])</rows>
+        <rows>[federated.1ywtm5k13ttlvp12jupo71pdz44i].[:Measure Names]</rows>
         <cols />
       </table>
-      <simple-id uuid='{9875162B-19A1-4859-A380-B7067014AC6E}' />
+      <simple-id uuid='{8F993617-B0AF-4B36-B468-736AD9F0512A}' />
     </worksheet>
     <worksheet name='unfinished3'>
       <table>
         <view>
-          <datasources />
+          <datasources>
+            <datasource caption='sample-superstore-subset-excel' name='federated.1ywtm5k13ttlvp12jupo71pdz44i' />
+          </datasources>
+          <datasource-dependencies datasource='federated.1ywtm5k13ttlvp12jupo71pdz44i'>
+            <column datatype='date' name='[Order Date]' role='dimension' type='ordinal' />
+            <column datatype='real' name='[Sales]' role='measure' type='quantitative' />
+            <column-instance column='[Order Date]' derivation='Month-Trunc' name='[tmn:Order Date:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Sales]' derivation='Sum' name='[win:sum:Sales:qk:20]' pivot='key' type='quantitative'>
+              <table-calc aggregation='Avg' from='-6' ordering-type='Rows' to='6' type='WindowTotal' window-options='IncludeCurrent' />
+            </column-instance>
+          </datasource-dependencies>
           <aggregation value='true' />
         </view>
         <style />
@@ -1299,8 +1467,8 @@
             <mark class='Automatic' />
           </pane>
         </panes>
-        <rows />
-        <cols />
+        <rows>[federated.1ywtm5k13ttlvp12jupo71pdz44i].[win:sum:Sales:qk:20]</rows>
+        <cols>[federated.1ywtm5k13ttlvp12jupo71pdz44i].[tmn:Order Date:qk]</cols>
       </table>
       <simple-id uuid='{FEB39744-7421-47D7-B7C3-7258112E1A5E}' />
     </worksheet>
@@ -1314,6 +1482,9 @@
             <column caption='profit_ratio' datatype='real' name='[Calculation_1529253612820652037]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='SUM([Profit]) / SUM([Sales])' />
             </column>
+            <column caption='Calculation1' datatype='boolean' name='[Calculation_1549519814658613253]' role='measure' type='nominal'>
+              <calculation class='tableau' formula='[Calculation_1529253612820652037] &gt; 0.25' />
+            </column>
             <column datatype='real' name='[Profit]' role='measure' type='quantitative' />
             <column aggregation='None' datatype='integer' name='[Sales (bin)]' role='dimension' type='quantitative'>
               <calculation class='bin' decimals='3' formula='[Sales]' peg='0' size='1000' />
@@ -1322,10 +1493,14 @@
             <column-instance column='[Sales]' derivation='Count' name='[cnt:Sales:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Sales (bin)]' derivation='None' name='[none:Sales (bin):qk]' pivot='key' type='quantitative' />
             <column-instance column='[Calculation_1529253612820652037]' derivation='User' name='[usr:Calculation_1529253612820652037:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1549519814658613253]' derivation='User' name='[usr:Calculation_1549519814658613253:nk]' pivot='key' type='nominal' />
           </datasource-dependencies>
           <aggregation value='true' />
         </view>
         <style>
+          <style-rule element='axis'>
+            <encoding attr='space' class='0' field='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[none:Sales (bin):qk]' field-type='quantitative' max='20000.0' min='0.0' range-type='fixed' scope='cols' type='space' />
+          </style-rule>
           <style-rule element='refline'>
             <format attr='fill-above' id='refline0' value='#00000000' />
             <format attr='fill-below' id='refline0' value='#00000000' />
@@ -1339,6 +1514,10 @@
             </view>
             <mark class='Bar' />
             <mark-sizing custom-mark-size-in-axis-units='1.0' mark-alignment='mark-alignment-left' mark-sizing-setting='marks-scaling-on' use-custom-mark-size='false' />
+            <encodings>
+              <color column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1549519814658613253:nk]' />
+            </encodings>
+            <reference-line axis-column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1529253612820652037:qk]' enable-instant-analytics='true' formula='constant' id='refline0' label-type='automatic' scope='per-pane' value='0.25' value-column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1529253612820652037:qk]' z-order='1' />
             <style>
               <style-rule element='mark'>
                 <format attr='mark-labels-show' value='true' />
@@ -1352,6 +1531,9 @@
             </view>
             <mark class='Bar' />
             <mark-sizing custom-mark-size-in-axis-units='1.0' mark-alignment='mark-alignment-left' mark-sizing-setting='marks-scaling-on' use-custom-mark-size='false' />
+            <encodings>
+              <color column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1549519814658613253:nk]' />
+            </encodings>
             <style>
               <style-rule element='mark'>
                 <format attr='mark-labels-show' value='true' />
@@ -1365,6 +1547,9 @@
             </view>
             <mark class='Bar' />
             <mark-sizing custom-mark-size-in-axis-units='1.0' mark-alignment='mark-alignment-left' mark-sizing-setting='marks-scaling-on' use-custom-mark-size='false' />
+            <encodings>
+              <color column='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1549519814658613253:nk]' />
+            </encodings>
             <style>
               <style-rule element='mark'>
                 <format attr='mark-labels-show' value='true' />
@@ -1382,7 +1567,7 @@
       <simple-id uuid='{FE8E972B-D5C8-4C17-A741-7023D1FCA06C}' />
     </worksheet>
   </worksheets>
-  <windows show-side-pane='false' source-height='30'>
+  <windows source-height='30'>
     <window class='worksheet' name='percentage'>
       <cards>
         <edge name='left'>
@@ -1494,6 +1679,9 @@
           </strip>
         </edge>
       </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+      </viewpoint>
       <simple-id uuid='{FFCF65F9-63B4-4214-85B8-90D0803DC8EF}' />
     </window>
     <window class='worksheet' name='below_avg'>
@@ -1547,7 +1735,7 @@
       </cards>
       <simple-id uuid='{04321E84-8596-423B-BCAD-2F1C5B7BFB60}' />
     </window>
-    <window class='worksheet' maximized='true' name='lowest_profit'>
+    <window class='worksheet' name='lowest_profit'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -1594,13 +1782,14 @@
       </cards>
       <simple-id uuid='{DEAA1C5C-792C-48FF-8213-32DCD026C36D}' />
     </window>
-    <window class='worksheet' name='Q9'>
+    <window class='worksheet' maximized='true' name='Q9'>
       <cards>
         <edge name='left'>
-          <strip size='160'>
+          <strip size='272'>
             <card type='pages' />
             <card type='filters' />
             <card type='marks' />
+            <card type='measures' />
           </strip>
         </edge>
         <edge name='top'>
@@ -1612,6 +1801,11 @@
           </strip>
           <strip size='31'>
             <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card param='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[none:Product Sub-Category:nk]' type='filter' />
           </strip>
         </edge>
       </cards>
@@ -1637,8 +1831,43 @@
             <card type='title' />
           </strip>
         </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='0' param='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[io:Customer Name Set:nk]' type='color' />
+          </strip>
+        </edge>
       </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+      </viewpoint>
       <simple-id uuid='{5E0FDEB5-1314-4B48-BCC7-980517EDF227}' />
+    </window>
+    <window class='worksheet' name='unfinished2 (2)'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+            <card type='measures' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+      </viewpoint>
+      <simple-id uuid='{6CFC20E7-09B0-4A47-9238-28A7A973766A}' />
     </window>
     <window class='worksheet' name='unfinished3'>
       <cards>
@@ -1681,6 +1910,11 @@
           </strip>
           <strip size='31'>
             <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='1' param='[federated.1ywtm5k13ttlvp12jupo71pdz44i].[usr:Calculation_1549519814658613253:nk]' type='color' />
           </strip>
         </edge>
       </cards>
